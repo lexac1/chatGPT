@@ -15,12 +15,10 @@
 import openai
 import logging
 import os
-import sys
-import time
 from datetime import datetime
 
-# Set up OpenAI API key
-openai.api_key = "your_api_key_here"
+# Set up authentication
+openai.api_key = os.environ["OPENAI_API_KEY"]
 
 # Set up agent names
 your_agent_name = "User"
@@ -28,12 +26,12 @@ ai_agent_name = "ChatGPT"
 
 # Set up logging
 timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-log_file = f"chats/{timestamp}.log"
+log_file = f"chats/chat_log_{timestamp}.log"
 
 if not os.path.exists("chats"):
     os.makedirs("chats")
 
-logging.basicConfig(filename=log_file, level=logging.INFO, format='%(message)s')
+logging.basicConfig(filename=log_file, level=logging.INFO, format='%(asctime)s\n%(message)s')
 
 def log_and_print(agent_name, message):
     formatted_message = f"{agent_name}: {message}"
