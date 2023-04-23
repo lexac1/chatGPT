@@ -40,4 +40,4 @@ During the conversation, you can type "q" and hit enter to end the conversation 
 
 This code is designed to work with OpenAI's GPT-3.5-Turbo language model. If you want to use a different language model, you will need to modify the `model` parameter in the `openai.ChatCompletion.create()` function call.
 
-This code saves the conversation log to a file in the `~/Projects/chatGPT/chats` directory. If you want to save the conversation log to a different directory, you will need to modify the `log_dir` variable in the code.
+This code saves the conversation log to a file in the current dir `/chats`. If you want to save the conversation log to a different directory, you will need to modify the `log_dir` variable in the code.
