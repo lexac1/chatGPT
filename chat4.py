@@ -21,25 +21,26 @@ from datetime import datetime
 openai.api_key = os.environ["OPENAI_API_KEY"]
 
 # Set up agent names
-your_agent_name = "User"
+user_agent_name = "User"
 ai_agent_name = "ChatGPT"
 
 # Set up logging
 timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-log_file = f"chats/chat_log_{timestamp}.log"
+log_directory = "chats"
+log_file = f"{log_directory}/chat_log_{timestamp}.log"
 
-if not os.path.exists("chats"):
-    os.makedirs("chats")
+if not os.path.exists(log_directory):
+    os.makedirs(log_directory)
 
 logging.basicConfig(filename=log_file, level=logging.INFO, format='%(asctime)s\n%(message)s')
 
-def log_and_print(agent_name, message, print_message=True):
+def log_message(agent_name, message, display=True):
     formatted_message = f"\n{agent_name}:\n{message}\n"
-    if print_message:
+    if display:
         print(formatted_message)
     logging.info(formatted_message)
 
-def chat(prompt):
+def get_ai_response(prompt):
     try:
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
@@ -47,31 +48,30 @@ def chat(prompt):
                 {"role": "user", "content": f"{prompt}"}
             ],
             temperature=0.7,
-            max_tokens=2000,
             n=1,
             stop=None
         )
         message = response.choices[0].message.content.strip()
         return message
     except Exception as e:
-        log_and_print("Error", f"An error occurred: {e}")
+        log_message("Error", f"An error occurred: {e}")
         return None
 
 def main():
-    log_and_print("Info", "Starting chat session...")
+    log_message("Info", "Starting chat session...")
 
     while True:
-        user_input = input(f"{your_agent_name}:\n")
+        user_input = input(f"{user_agent_name}:\n")
 
         if user_input.lower() == "q":
-            log_and_print("Info", "Ending chat session...")
+            log_message("Info", "Ending chat session...")
             break
 
-        log_and_print(your_agent_name, user_input, print_message=False)
-        ai_response = chat(user_input)
+        log_message(user_agent_name, user_input, display=False)
+        ai_response = get_ai_response(user_input)
 
         if ai_response is not None:
-            log_and_print(ai_agent_name, ai_response)
+            log_message(ai_agent_name, ai_response)
 
 if __name__ == "__main__":
     main()
