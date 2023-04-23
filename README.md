@@ -26,6 +26,12 @@ To run the chat interface, simply run the Python script from the command line:
 python3 chat.py
 ```
 
+or 
+
+```shell
+python3 chat4.py
+```
+
 Once the script is running, you will be prompted to enter your first message. Type your message and hit enter to start the conversation.
 
 During the conversation, you can type "q" and hit enter to end the conversation and save the conversation log to disk. You can also type "p" and hit enter to save the conversation log to disk and start a new conversation.
