@@ -33,22 +33,25 @@ if not os.path.exists("chats"):
 
 logging.basicConfig(filename=log_file, level=logging.INFO, format='%(asctime)s\n%(message)s')
 
-def log_and_print(agent_name, message):
-    formatted_message = f"{agent_name}: {message}"
-    print(formatted_message)
+def log_and_print(agent_name, message, print_message=True):
+    formatted_message = f"\n{agent_name}:\n{message}\n"
+    if print_message:
+        print(formatted_message)
     logging.info(formatted_message)
 
 def chat(prompt):
     try:
-        response = openai.Completion.create(
-            engine="gpt-3.5-turbo",
-            prompt=prompt,
-            max_tokens=150,
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "user", "content": f"{prompt}"}
+            ],
+            temperature=0.7,
+            max_tokens=2000,
             n=1,
-            stop=None,
-            temperature=0.8,
+            stop=None
         )
-        message = response.choices[0].text.strip()
+        message = response.choices[0].message.content.strip()
         return message
     except Exception as e:
         log_and_print("Error", f"An error occurred: {e}")
@@ -58,13 +61,13 @@ def main():
     log_and_print("Info", "Starting chat session...")
 
     while True:
-        user_input = input(f"{your_agent_name}: ")
+        user_input = input(f"{your_agent_name}:\n")
 
         if user_input.lower() == "q":
             log_and_print("Info", "Ending chat session...")
             break
 
-        log_and_print(your_agent_name, user_input)
+        log_and_print(your_agent_name, user_input, print_message=False)
         ai_response = chat(user_input)
 
         if ai_response is not None:
